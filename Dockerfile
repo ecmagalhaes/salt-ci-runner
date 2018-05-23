@@ -1,12 +1,21 @@
 FROM ubuntu:16.04
 
-ADD run_salt.sh /root/run_salt.sh
-
 RUN apt-get update && apt-get install -y curl wget && \
-    curl -L https://bootstrap.saltstack.com -o install_salt.sh && \
-    sh install_salt.sh -P -M && \
-    echo "open_mode: True" > /etc/salt/master.d/master.conf && \
-    echo "auto_accept: True" >> /etc/salt/master.d/master.conf && \
-    chmod a+x /root/run_salt.sh
+    curl -L https://bootstrap.saltstack.com -o bootstrap_salt.sh && \
+    sh bootstrap_salt.sh && \
+    echo "file_client: local" > /etc/salt/minion.d/minion.conf && \
+    mkdir -p /opt/salt/base && \
+    mkdir -p /opt/salt/base/pillars && \
+    mkdir -p /opt/salt/base/states && \
+    mkdir -p /opt/salt/base/artifacts && \
+    mkdir -p /opt/salt/base/formulas && \
+    echo "pillar_roots:" > /etc/salt/minion.d/pillar_roots.conf && \
+    echo "  base:" >> /etc/salt/minion.d/pillar_roots.conf && \
+    echo "    - /opt/salt/base/pillars" >> /etc/salt/minion.d/pillar_roots.conf && \
+    echo "file_roots:" > /etc/salt/minion.d/file_roots.conf && \
+    echo "  base:" >> /etc/salt/minion.d/file_roots.conf && \
+    echo "    - /opt/salt/base/states" >> /etc/salt/minion.d/file_roots.conf && \
+    echo "    - /opt/salt/base/artifacts" >> /etc/salt/minion.d/file_roots.conf && \
+    echo "    - /opt/salt/base/formulas" >> /etc/salt/minion.d/file_roots.conf
 
-CMD ["/root/run_salt.sh"]
+CMD ["/bin/bash"]
