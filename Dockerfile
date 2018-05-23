@@ -16,6 +16,9 @@ RUN apt-get update && apt-get install -y curl wget && \
     echo "  base:" >> /etc/salt/minion.d/file_roots.conf && \
     echo "    - /opt/salt/base/states" >> /etc/salt/minion.d/file_roots.conf && \
     echo "    - /opt/salt/base/artifacts" >> /etc/salt/minion.d/file_roots.conf && \
-    echo "    - /opt/salt/base/formulas" >> /etc/salt/minion.d/file_roots.conf
+    echo "    - /opt/salt/base/formulas" >> /etc/salt/minion.d/file_roots.conf && \
+    echo "base:" > /opt/salt/base/pillars/top.sls && \
+    echo "  '*':" >> /opt/salt/base/pillars/top.sls && \
+    echo "    - pillar" >> /opt/salt/base/pillars/top.sls
 
 CMD ["/bin/bash"]
