@@ -1,7 +1,7 @@
 FROM ubuntu:16.04
 
 RUN apt-get update && apt-get install -y curl wget && \
-    apt-get install python-pip && \
+    apt-get install -y python-pip && \
     pip install salt-pepper && \
     curl -L https://bootstrap.saltstack.com -o bootstrap_salt.sh && \
     sh bootstrap_salt.sh && \
