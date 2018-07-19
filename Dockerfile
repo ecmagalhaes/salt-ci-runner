@@ -1,6 +1,8 @@
 FROM ubuntu:16.04
 
 RUN apt-get update && apt-get install -y curl wget && \
+    apt-get install python-pip && \
+    pip install salt-pepper && \
     curl -L https://bootstrap.saltstack.com -o bootstrap_salt.sh && \
     sh bootstrap_salt.sh && \
     echo "file_client: local" > /etc/salt/minion.d/minion.conf && \

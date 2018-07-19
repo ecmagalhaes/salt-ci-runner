@@ -18,10 +18,13 @@ build:
    - /usr/bin/salt-call --local state.apply test
 ```
 
+#### Changelog
+- 2018-07-19 - added salt pepper and pip package
+
 #### TODO
 - Add unit test tool
 ---
 ### Maintainer
 `Simian Labs` - (https://github.com/simianlabs)  
-http://simianlabs.io || sl@simianlabs.io
+http://simianlabs.io || smonko@simianlabs.io
 
