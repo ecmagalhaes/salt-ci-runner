@@ -1,26 +1,43 @@
-FROM ubuntu:16.04
+FROM centos:7
 
-RUN apt-get update && apt-get install -y curl wget && \
-    apt-get install -y python-pip && \
-    pip install salt-pepper && \
-    curl -L https://bootstrap.saltstack.com -o bootstrap_salt.sh && \
-    sh bootstrap_salt.sh && \
+ENV container docker
+
+# enable SystemD
+RUN (cd /lib/systemd/system/sysinit.target.wants/; for i in *; do [ $i == systemd-tmpfiles-setup.service ] || rm -f $i; done); \
+    rm -f /lib/systemd/system/multi-user.target.wants/*; \
+    rm -f /etc/systemd/system/*.wants/*; \
+    rm -f /lib/systemd/system/local-fs.target.wants/*; \
+    rm -f /lib/systemd/system/sockets.target.wants/*udev*; \
+    rm -f /lib/systemd/system/sockets.target.wants/*initctl*; \
+    rm -f /lib/systemd/system/basic.target.wants/*; \
+    rm -f /lib/systemd/system/anaconda.target.wants/*;
+
+VOLUME [ "/sys/fs/cgroup" ]
+
+CMD ["/usr/sbin/init"]
+
+# install dependencies & SaltStack
+RUN yum clean all \
+    && yum install -y yum install epel-release \
+    && yum install -y yum install https://repo.saltstack.com/yum/redhat/salt-repo-latest-2.el7.noarch.rpm  \
+    && yum clean expire-cache \
+    && yum update -y \
+    && yum install -y -q sudo \
+    salt-minion  \
+    && yum clean all
+
+# add minion's configuration modules
+ADD centos/7/conf/minion.d/conf/minion.d/* /etc/salt/minion.d/
+
     echo "file_client: local" > /etc/salt/minion.d/file_client.conf && \
-    mkdir -p /opt/salt/base && \
-    mkdir -p /opt/salt/base/pillars && \
-    mkdir -p /opt/salt/base/states && \
-    mkdir -p /opt/salt/base/artifacts && \
-    mkdir -p /opt/salt/base/formulas && \
     echo "pillar_roots:" > /etc/salt/minion.d/pillar_roots.conf && \
     echo "  base:" >> /etc/salt/minion.d/pillar_roots.conf && \
-    echo "    - /opt/salt/base/pillars" >> /etc/salt/minion.d/pillar_roots.conf && \
+    echo "    - /srv/pillar" >> /etc/salt/minion.d/pillar_roots.conf && \
     echo "file_roots:" > /etc/salt/minion.d/file_roots.conf && \
     echo "  base:" >> /etc/salt/minion.d/file_roots.conf && \
-    echo "    - /opt/salt/base/states" >> /etc/salt/minion.d/file_roots.conf && \
-    echo "    - /opt/salt/base/artifacts" >> /etc/salt/minion.d/file_roots.conf && \
-    echo "    - /opt/salt/base/formulas" >> /etc/salt/minion.d/file_roots.conf && \
-    echo "base:" > /opt/salt/base/pillars/top.sls && \
-    echo "  '*':" >> /opt/salt/base/pillars/top.sls && \
-    echo "    - pillar" >> /opt/salt/base/pillars/top.sls
+    echo "    - /srv/salt" >> /etc/salt/minion.d/file_roots.conf && \
+    echo "base:" > /srv/salt/top.sls && \
+    echo "  '*':" >> /srv/salt/top.sls && \
+    echo "    - pillar" >> /srv/salt/top.sls
 
 CMD ["/bin/bash"]
