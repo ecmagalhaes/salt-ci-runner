@@ -22,18 +22,9 @@ RUN yum clean all \
     && yum install -y yum install https://repo.saltstack.com/yum/redhat/salt-repo-latest-2.el7.noarch.rpm  \
     && yum clean expire-cache \
     && yum update -y \
-    && yum install -y -q sudo && \
-    mkdir -p /srv/salt/ && \
-    mkdir -p /srv/pillar && \
-    echo "file_client: local" > /etc/salt/minion.d/file_client.conf && \
-    echo "pillar_roots:" > /etc/salt/minion.d/pillar_roots.conf && \
-    echo "  base:" >> /etc/salt/minion.d/pillar_roots.conf && \
-    echo "    - /srv/pillar" >> /etc/salt/minion.d/pillar_roots.conf && \
-    echo "file_roots:" > /etc/salt/minion.d/file_roots.conf && \
-    echo "  base:" >> /etc/salt/minion.d/file_roots.conf && \
-    echo "    - /srv/salt" >> /etc/salt/minion.d/file_roots.conf && \
-    echo "base:" > /srv/salt/top.sls && \
-    echo "  '*':" >> /srv/salt/top.sls && \
-    echo "    - pillar" >> /srv/salt/top.sls \
+    && yum install -y -q sudo \
     salt-minion  \
     && yum clean all
+
+# add minion's configuration modules
+ADD conf/minion.d/* /etc/salt/minion.d/
