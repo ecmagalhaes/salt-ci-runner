@@ -36,5 +36,3 @@ RUN yum clean all \
     echo "base:" > /srv/salt/top.sls && \
     echo "  '*':" >> /srv/salt/top.sls && \
     echo "    - pillar" >> /srv/salt/top.sls
-
-CMD ["/bin/bash"]
