@@ -18,6 +18,11 @@ CMD ["/usr/sbin/init"]
 
 # install dependencies & SaltStack
 RUN yum clean all \
+    && yum install -y yum install epel-release \
+    && yum install -y yum install https://repo.saltstack.com/yum/redhat/salt-repo-latest-2.el7.noarch.rpm  \
+    && yum clean expire-cache \
+    && yum update -y \
+    && yum install -y -q sudo && \
     mkdir -p /srv/salt/ && \
     mkdir -p /srv/pillar && \
     echo "file_client: local" > /etc/salt/minion.d/file_client.conf && \
@@ -30,10 +35,5 @@ RUN yum clean all \
     echo "base:" > /srv/salt/top.sls && \
     echo "  '*':" >> /srv/salt/top.sls && \
     echo "    - pillar" >> /srv/salt/top.sls \
-    && yum install -y yum install epel-release \
-    && yum install -y yum install https://repo.saltstack.com/yum/redhat/salt-repo-latest-2.el7.noarch.rpm  \
-    && yum clean expire-cache \
-    && yum update -y \
-    && yum install -y -q sudo \
     salt-minion  \
     && yum clean all
