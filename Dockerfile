@@ -25,10 +25,7 @@ RUN yum clean all \
     && yum install -y -q sudo \
     salt-minion  \
     && yum clean all
-
 # add minion's configuration modules
-ADD centos/7/conf/minion.d/conf/minion.d/* /etc/salt/minion.d/
-
     echo "file_client: local" > /etc/salt/minion.d/file_client.conf && \
     echo "pillar_roots:" > /etc/salt/minion.d/pillar_roots.conf && \
     echo "  base:" >> /etc/salt/minion.d/pillar_roots.conf && \
