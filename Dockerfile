@@ -14,6 +14,7 @@ RUN apt-get update && apt-get install -y curl wget && \
     echo "pillar_roots:" > /etc/salt/minion.d/pillar_roots.conf && \
     echo "  base:" >> /etc/salt/minion.d/pillar_roots.conf && \
     echo "    - /opt/salt/base/pillars" >> /etc/salt/minion.d/pillar_roots.conf && \
+    echo "file_client: local" > /etc/salt/minion.d/file_client.conf && \
     echo "file_roots:" > /etc/salt/minion.d/file_roots.conf && \
     echo "  base:" >> /etc/salt/minion.d/file_roots.conf && \
     echo "    - /opt/salt/base/states" >> /etc/salt/minion.d/file_roots.conf && \
