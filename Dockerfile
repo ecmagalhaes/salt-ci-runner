@@ -5,7 +5,7 @@ RUN apt-get update && apt-get install -y curl wget && \
     pip install salt-pepper && \
     curl -L https://bootstrap.saltstack.com -o bootstrap_salt.sh && \
     sh bootstrap_salt.sh && \
-    echo "file_client: local" > /etc/salt/minion.d/minion.conf && \
+    echo "file_client: local" > /etc/salt/minion.d/file_client.conf && \
     mkdir -p /opt/salt/base && \
     mkdir -p /opt/salt/base/pillars && \
     mkdir -p /opt/salt/base/states && \
@@ -14,7 +14,6 @@ RUN apt-get update && apt-get install -y curl wget && \
     echo "pillar_roots:" > /etc/salt/minion.d/pillar_roots.conf && \
     echo "  base:" >> /etc/salt/minion.d/pillar_roots.conf && \
     echo "    - /opt/salt/base/pillars" >> /etc/salt/minion.d/pillar_roots.conf && \
-    echo "file_client: local" > /etc/salt/minion.d/file_client.conf && \
     echo "file_roots:" > /etc/salt/minion.d/file_roots.conf && \
     echo "  base:" >> /etc/salt/minion.d/file_roots.conf && \
     echo "    - /opt/salt/base/states" >> /etc/salt/minion.d/file_roots.conf && \
