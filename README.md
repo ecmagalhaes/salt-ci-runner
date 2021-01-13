@@ -14,6 +14,6 @@ salt-test-check:
     - merge_requests
   image: ecm1412/salt-ci-runner
   script:
-   - cp -r /builds/saltstack/states /opt/salt/base/states/
+   - cp -r /builds/saltstack/states /srv/salt
    - salt-call --local state.apply test
 ```
