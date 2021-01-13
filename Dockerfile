@@ -28,3 +28,8 @@ RUN yum clean all \
 
 # add minion's configuration modules
 ADD conf/minion.d/* /etc/salt/minion.d/
+RUN mkdir -p /srv/pillar && \
+    mkdir -p /srv/states
+RUN echo "base:" > /srv/salt/pillar/top.sls && \
+    echo "  '*':" >> /srv/salt/pillar/top.sls && \
+    echo "    - pillar" >> /srv/salt/pillar/top.sls
