@@ -30,6 +30,6 @@ RUN yum clean all \
 ADD conf/minion.d/* /etc/salt/minion.d/
 RUN mkdir -p /srv/pillar && \
     mkdir -p /srv/states
-RUN echo "base:" > /srv/salt/pillar/top.sls && \
-    echo "  '*':" >> /srv/salt/pillar/top.sls && \
-    echo "    - pillar" >> /srv/salt/pillar/top.sls
+RUN echo "base:" > /srv/pillar/top.sls && \
+    echo "  '*':" >> /srv/pillar/top.sls && \
+    echo "    - pillar" >> /srv/pillar/top.sls
