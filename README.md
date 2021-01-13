@@ -2,29 +2,18 @@
 ![Docker Automated build](https://img.shields.io/docker/automated/jrottenberg/ffmpeg.svg)
 
 
-# salt-ci-runner
+# salt-ci-runner (modified Dockerfile)
 
 Simple image to use with Gitlab CI/CD and docker runners to test Salt states and formulas.
 
 .gitlab-ci.yaml example:
 ```
-build:
+salt-test-check:
   stage: test
-  image: smonko/salt-ci-runner
-  allow_failure: true
+  only:
+    - merge_requests
+  image: ecm1412/salt-ci-runner
   script:
-   - cp -r test /opt/salt/base/formulas/test
-   - cp pillar.example /opt/salt/base/pillars/pillar.sls
-   - /usr/bin/salt-call --local state.apply test
+   - cp -r /builds/saltstack/states /opt/salt/base/states/
+   - salt-call --local state.apply test
 ```
-
-#### Changelog
-- 2018-07-19 - added salt pepper and pip package
-
-#### TODO
-- Add unit test tool
----
-### Maintainer
-`Simian Labs` - (https://github.com/simianlabs)  
-http://simianlabs.io || smonko@simianlabs.io
-
