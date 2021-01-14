@@ -23,4 +23,6 @@ RUN apt-get update && apt-get install -y curl git && \
 
 CMD ["/bin/bash"]
 
+RUN service salt-minion stop
+
 RUN salt-call --local state.apply
