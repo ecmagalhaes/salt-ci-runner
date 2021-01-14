@@ -1,37 +1,48 @@
-FROM centos:7
+FROM debian:8
 
+# set local vars
 ENV container docker
+ENV LANG C.UTF-8
+#ENV DEBIAN_FRONTEND noninteractive
 
-# enable SystemD
-RUN (cd /lib/systemd/system/sysinit.target.wants/; for i in *; do [ $i == systemd-tmpfiles-setup.service ] || rm -f $i; done); \
-    rm -f /lib/systemd/system/multi-user.target.wants/*; \
-    rm -f /etc/systemd/system/*.wants/*; \
-    rm -f /lib/systemd/system/local-fs.target.wants/*; \
-    rm -f /lib/systemd/system/sockets.target.wants/*udev*; \
-    rm -f /lib/systemd/system/sockets.target.wants/*initctl*; \
-    rm -f /lib/systemd/system/basic.target.wants/*; \
-    rm -f /lib/systemd/system/anaconda.target.wants/*;
+# install dependencies
+RUN sed -i 's/main/main contrib non-free/g' /etc/apt/sources.list
+RUN echo "deb http://deb.debian.org/debian jessie-backports main contrib non-free" >> /etc/apt/sources.list
+RUN apt-get update \
+    && DEBIAN_FRONTEND=noninteractive apt-get install -y -q systemd \
+    curl \
+    sudo \
+    cron \
+    dbus \
+    && apt-get clean \
+    && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
-VOLUME [ "/sys/fs/cgroup" ]
+# add SaltStack repo
+ADD conf/saltstack.list /etc/apt/sources.list.d/saltstack.list
 
-CMD ["/usr/sbin/init"]
-
-# install dependencies & SaltStack
-RUN yum clean all \
-    && yum install -y yum install epel-release \
-    && yum install -y yum install https://repo.saltstack.com/yum/redhat/salt-repo-latest-2.el7.noarch.rpm  \
-    && yum clean expire-cache \
-    && yum update -y \
-    && yum install -y -q sudo \
-    salt-minion  \
-    && yum clean all
+# install SaltStack
+RUN curl https://repo.saltstack.com/apt/debian/8/amd64/latest/SALTSTACK-GPG-KEY.pub | apt-key add - \
+    && apt-get update \
+    && DEBIAN_FRONTEND=noninteractive apt-get install -y -q \
+    salt-minion
 
 # add minion's configuration modules
 ADD conf/minion.d/* /etc/salt/minion.d/
-RUN mkdir -p /srv/salt && \
-    mkdir -p /srv/pillar && \
-    mkdir -p /srv/states
-RUN echo "base:" > /srv/salt/top.sls && \
-    echo "  '*':" >> /srv/salt/top.sls && \
-    echo "    - states" >> /srv/salt/top.sls && \
-    echo "    - pillar" >> /srv/salt/top.sls
+
+RUN cd /lib/systemd/system/sysinit.target.wants/; ls | grep -v systemd-tmpfiles-setup | xargs rm -f $1 \
+      rm -f /lib/systemd/system/multi-user.target.wants/*;\
+      rm -f /etc/systemd/system/*.wants/*;\
+      rm -f /lib/systemd/system/local-fs.target.wants/*; \
+      rm -f /lib/systemd/system/sockets.target.wants/*udev*; \
+      rm -f /lib/systemd/system/sockets.target.wants/*initctl*; \
+      rm -f /lib/systemd/system/basic.target.wants/*;\
+      rm -f /lib/systemd/system/anaconda.target.wants/*; \
+      rm -f /lib/systemd/system/plymouth*; \
+      rm -f /lib/systemd/system/systemd-update-utmp*;
+
+# set local vars
+ENV init /lib/systemd/systemd
+
+VOLUME [ "/sys/fs/cgroup" ]
+
+ENTRYPOINT ["/lib/systemd/systemd"]
