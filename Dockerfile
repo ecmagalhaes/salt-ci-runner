@@ -12,6 +12,3 @@ ADD conf/salt /srv/salt
 
 # add top level pillar
 ADD conf/pillar /srv/pillar
-
-# create formulas' directory
-RUN mkdir -p /srv/formulas
