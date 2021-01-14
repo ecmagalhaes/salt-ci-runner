@@ -19,8 +19,9 @@ CMD ["/usr/sbin/init"]
 # install dependencies & SaltStack
 RUN yum clean all && \
     yum update -y && \
-    yum install -y yum install epel-release && \
+    yum install -y epel-release && \
     yum install -y python-pip && \
+    yum install -y wget curl && \
     wget -O - http://bootstrap.saltstack.org | sudo sh
 
 # add minion's configuration modules
