@@ -33,4 +33,5 @@ RUN mkdir -p /srv/salt && \
     mkdir -p /srv/states
 RUN echo "base:" > /srv/salt/top.sls && \
     echo "  '*':" >> /srv/salt/top.sls && \
+    echo "    - states" >> /srv/salt/top.sls && \
     echo "    - pillar" >> /srv/salt/top.sls
