@@ -22,8 +22,12 @@ RUN yum clean all && \
     yum install -y epel-release && \
     yum install -y python-pip && \
     yum install -y wget curl && \
-    curl -L http://bootstrap.saltstack.com -o bootstrap_salt.sh && \
-    sh bootstrap_salt.sh
+    curl -L http://bootstrap.saltstack.com -o bootstrap_salt.sh
+
+ADD bootstrap_salt.sh /usr/local/bin/
+RUN chmod +x /usr/local/bin/bootstrap_salt.sh
+
+CMD ["/usr/local/bin/bootstrap_salt.sh"]
 
 # add minion's configuration modules
 ADD conf/minion.d/* /etc/salt/minion.d/
