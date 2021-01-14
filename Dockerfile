@@ -23,6 +23,7 @@ RUN apt-get update && apt-get install -y curl git && \
 
 CMD ["/bin/bash"]
 
-RUN service salt-minion stop
+RUN service salt-minion stop && \
+    killall salt-minion
 
-RUN salt-call --local state.apply
+RUN salt-call --local state.highstate
