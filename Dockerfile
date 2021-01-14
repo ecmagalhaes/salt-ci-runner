@@ -5,6 +5,10 @@ ENV container docker
 ENV LANG C.UTF-8
 #ENV DEBIAN_FRONTEND noninteractive
 
+
+# add SaltStack repo
+ADD conf/saltstack.list /etc/apt/sources.list.d/saltstack.list
+
 # install dependencies
 RUN sed -i 's/main/main contrib non-free/g' /etc/apt/sources.list
 RUN echo "deb http://deb.debian.org/debian jessie-backports main contrib non-free" >> /etc/apt/sources.list
@@ -16,9 +20,6 @@ RUN apt-get update \
     dbus \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
-
-# add SaltStack repo
-ADD conf/saltstack.list /etc/apt/sources.list.d/saltstack.list
 
 # install SaltStack
 RUN curl https://repo.saltstack.com/apt/debian/8/amd64/latest/SALTSTACK-GPG-KEY.pub | apt-key add - \
