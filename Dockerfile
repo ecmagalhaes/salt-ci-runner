@@ -23,6 +23,4 @@ RUN apt-get update && apt-get install -y curl wget && \
     echo "  '*':" >> /opt/salt/base/pillars/top.sls && \
     echo "    - pillar" >> /opt/salt/base/pillars/top.sls
 
-RUN salt-call --local state.highstate -l debug
-
 CMD ["/bin/bash"]
