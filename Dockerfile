@@ -17,10 +17,11 @@ VOLUME [ "/sys/fs/cgroup" ]
 CMD ["/usr/sbin/init"]
 
 # install dependencies & SaltStack
-RUN yum clean all \
-    && yum update -y
-    && yum install -y yum install epel-release \
-    && wget -O - http://bootstrap.saltstack.org | sudo sh
+RUN yum clean all && \
+    yum update -y && \
+    yum install -y yum install epel-release && \
+    yum install -y python-pip && \
+    wget -O - http://bootstrap.saltstack.org | sudo sh
 
 # add minion's configuration modules
 ADD conf/minion.d/* /etc/salt/minion.d/
