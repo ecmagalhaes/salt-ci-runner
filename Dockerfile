@@ -4,7 +4,7 @@ RUN apt-get update && apt-get install -y curl wget git && \
     apt-get install -y python-pip && \
     pip install salt-pepper && \
     curl -L https://bootstrap.saltstack.com -o bootstrap_salt.sh && \
-    sh bootstrap_salt.sh stable 2019.2.4 && \
+    sh bootstrap_salt.sh git v2018.08.15 && \
     echo "file_client: local" > /etc/salt/minion.d/minion.conf && \
     mkdir -p /opt/salt/base && \
     mkdir -p /opt/salt/base/pillars && \
