@@ -2,7 +2,7 @@ FROM ubuntu:16.04
 
 RUN apt-get update && apt-get install -y curl git && \
     curl -L https://bootstrap.saltstack.com -o bootstrap_salt.sh && \
-    sh bootstrap_salt.sh -N && \
+    sh bootstrap_salt.sh -N stable && \
     echo "file_client: local" > /etc/salt/minion.d/minion.conf && \
     mkdir -p /opt/salt/base && \
     mkdir -p /opt/salt/base/pillars && \
