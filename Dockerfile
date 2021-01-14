@@ -20,10 +20,7 @@ RUN apt-get update && apt-get install -y curl git && \
     echo "base:" > /opt/salt/base/pillars/top.sls && \
     echo "  '*':" >> /opt/salt/base/pillars/top.sls && \
     echo "    - pillar" >> /opt/salt/base/pillars/top.sls
+    
+RUN service salt-minion stop
 
 CMD ["/bin/bash"]
-
-RUN service salt-minion stop && \
-    killall salt-minion
-
-RUN salt-call --local state.highstate
