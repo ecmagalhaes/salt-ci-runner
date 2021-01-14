@@ -6,9 +6,12 @@ RUN apt-get update && apt-get install -y curl wget && \
 
 # add minion's configuration modules
 ADD conf/minion.d/* /etc/salt/minion.d/
+RUN mkdir -p /srv/salt && \
+    mkdir -p /srv/pillar && \
+    mkdir -p /srv/states
+RUN echo "base:" > /srv/salt/top.sls && \
+    echo "  '*':" >> /srv/salt/top.sls && \
+    echo "    - states" >> /srv/salt/top.sls && \
+    echo "    - pillar" >> /srv/salt/top.sls
 
-# add top level states
-ADD conf/salt /srv/salt
-
-# add top level pillar
-ADD conf/pillar /srv/pillar
+RUN salt-call state.apply
