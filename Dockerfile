@@ -1,18 +1,12 @@
-FROM centos:7
+Docker ubuntu16
 
-ENV container docker
+FROM ubuntu:16.04
 
-# install SaltStack
-RUN yum install -y https://repo.saltstack.com/yum/redhat/salt-repo-latest-2.el7.noarch.rpm \
-    && yum clean expire-cache \
-    && yum install -y \
-        git \
-        salt-minion \
-        vim
-
-# add minion's configuration modules
-
-RUN mkdir -p /opt/salt/base && \
+RUN apt-get update && apt-get install -y curl git && \
+    curl -L https://bootstrap.saltstack.com -o bootstrap_salt.sh && \
+    sh bootstrap_salt.sh && \
+    echo "file_client: local" > /etc/salt/minion.d/minion.conf && \
+    mkdir -p /opt/salt/base && \
     mkdir -p /opt/salt/base/pillars && \
     mkdir -p /opt/salt/base/states && \
     mkdir -p /opt/salt/base/artifacts && \
@@ -28,5 +22,7 @@ RUN mkdir -p /opt/salt/base && \
     echo "base:" > /opt/salt/base/pillars/top.sls && \
     echo "  '*':" >> /opt/salt/base/pillars/top.sls && \
     echo "    - pillar" >> /opt/salt/base/pillars/top.sls
+    
+RUN service salt-minion stop
 
-RUN salt-call --local state.apply
+CMD ["/bin/bash"]
