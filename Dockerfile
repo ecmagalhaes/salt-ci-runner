@@ -12,6 +12,9 @@ RUN yum install -y https://repo.saltstack.com/yum/redhat/salt-repo-latest-2.el7.
 
 # add minion's configuration modules
 ADD conf/minion.d/* /etc/salt/minion.d/
+RUN mkdir -p /srv/salt && \
+    mkdir -p /srv/pillar && \
+    mkdir -p /srv/states
 RUN echo "base:" > /srv/salt/top.sls && \
     echo "  '*':" >> /srv/salt/top.sls && \
     echo "    - states" >> /srv/salt/top.sls && \
