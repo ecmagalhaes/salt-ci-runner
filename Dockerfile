@@ -17,7 +17,4 @@ RUN mkdir -p /srv/salt && \
     mkdir -p /srv/states
 RUN echo "base:" > /srv/salt/top.sls && \
     echo "  '*':" >> /srv/salt/top.sls && \
-    echo "    - states" >> /srv/salt/top.sls && \
     echo "    - pillar" >> /srv/salt/top.sls
-RUN salt-call saltutil.refresh_pillar
-RUN salt-call --local state.apply
