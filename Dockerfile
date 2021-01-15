@@ -12,5 +12,6 @@ RUN yum install -y https://repo.saltstack.com/yum/redhat/salt-repo-latest-2.el7.
 
 # add minion's configuration modules
 ADD conf/minion.d/* /etc/salt/minion.d/
+ADD conf/pillar/top.sls /srv/pillar
 RUN salt-call saltutil.refresh_pillar
 RUN salt-call --local state.apply
