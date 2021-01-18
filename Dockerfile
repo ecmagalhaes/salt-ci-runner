@@ -25,4 +25,4 @@ CMD ["/bin/bash"]
 
 RUN salt-call --versions-report
 
-RUN salt-call -l debug service.restart salt-minion
+RUN salt-call --local -l debug service.restart salt-minion
