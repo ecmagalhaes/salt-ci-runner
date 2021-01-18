@@ -23,6 +23,6 @@ RUN apt-get update && apt-get install -y curl git && \
 
 CMD ["/bin/bash"]
 
-RUN salt-call --versions-report
-
 RUN salt-call --local -l debug service.restart salt-minion
+
+RUN salt-call --versions-report
