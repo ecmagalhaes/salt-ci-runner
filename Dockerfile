@@ -3,12 +3,12 @@ FROM ubuntu:16.04
 RUN apt-get update && apt-get install -y curl git && \
     curl -L https://bootstrap.saltstack.com -o bootstrap_salt.sh && \
     sh bootstrap_salt.sh && \
-    echo "file_client: local" > /etc/salt/minion.d/minion.conf && \
     mkdir -p /opt/salt/base && \
     mkdir -p /opt/salt/base/pillars && \
     mkdir -p /opt/salt/base/states && \
     mkdir -p /opt/salt/base/artifacts && \
     mkdir -p /opt/salt/base/formulas && \
+    echo "file_client: local" > /etc/salt/minion.d/minion.conf && \
     echo "pillar_roots:" > /etc/salt/minion.d/pillar_roots.conf && \
     echo "  base:" >> /etc/salt/minion.d/pillar_roots.conf && \
     echo "    - /opt/salt/base/pillars" >> /etc/salt/minion.d/pillar_roots.conf && \
