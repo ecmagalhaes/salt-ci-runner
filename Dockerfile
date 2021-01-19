@@ -3,15 +3,11 @@ FROM ubuntu:16.04
 RUN apt-get update && apt-get install -y curl git && \
     curl -L https://bootstrap.saltstack.com -o bootstrap_salt.sh && \
     sh bootstrap_salt.sh && \
-    mkdir -p /opt/salt/base && \
-    mkdir -p /opt/salt/base/pillars && \
-    mkdir -p /opt/salt/base/states && \
-    mkdir -p /opt/salt/base/artifacts && \
-    mkdir -p /opt/salt/base/formulas && \
+    mkdir -p /opt/salt/base{states,templates,files,pillar}
     echo "file_client: local" > /etc/salt/minion.d/minion.conf && \
     echo "pillar_roots:" > /etc/salt/minion.d/pillar_roots.conf && \
     echo "  base:" >> /etc/salt/minion.d/pillar_roots.conf && \
-    echo "    - /opt/salt/base/pillars" >> /etc/salt/minion.d/pillar_roots.conf && \
+    echo "    - /opt/salt/base/pillar" >> /etc/salt/minion.d/pillar_roots.conf && \
     echo "    - /opt/salt/base/states" >> /etc/salt/minion.d/pillar_roots.conf && \
     echo "    - /opt/salt/base/artifacts" >> /etc/salt/minion.d/pillar_roots.conf && \
     echo "    - /opt/salt/base/formulas" >> /etc/salt/minion.d/pillar_roots.conf && \
@@ -20,14 +16,10 @@ RUN apt-get update && apt-get install -y curl git && \
     echo "    - /opt/salt/base/states" >> /etc/salt/minion.d/file_roots.conf && \
     echo "    - /opt/salt/base/artifacts" >> /etc/salt/minion.d/file_roots.conf && \
     echo "    - /opt/salt/base/formulas" >> /etc/salt/minion.d/file_roots.conf && \
-    echo "    - /opt/salt/base/pillars" >> /etc/salt/minion.d/file_roots.conf
+    echo "    - /opt/salt/base/pillar" >> /etc/salt/minion.d/file_roots.conf
 
 CMD ["/bin/bash"]
 
 RUN salt-call --local -l debug service.restart salt-minion
 
-RUN systemctl stop firewalld
-
-#RUN salt-call --versions-report
-
-RUN salt-key -A
+RUN salt-call --local test.ping
