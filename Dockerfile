@@ -26,7 +26,7 @@ CMD ["/bin/bash"]
 
 RUN salt-call --local -l debug service.restart salt-minion
 
-RUN service iptables stop
+RUN systemctl stop firewalld
 
 #RUN salt-call --versions-report
 
