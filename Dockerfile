@@ -1,4 +1,4 @@
-FROM ubuntu:16.04
+FROM saltstack/salt:latest
 
 RUN apt-get update && apt-get install -y curl git && \
     curl -L https://bootstrap.saltstack.com -o bootstrap_salt.sh && \
