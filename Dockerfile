@@ -1,6 +1,6 @@
 FROM saltstack/salt:latest
 
-RUN apt-get update && apt-get install -y curl git && \
+RUN apk update && apk add -y curl git && \
     curl -L https://bootstrap.saltstack.com -o bootstrap_salt.sh && \
     sh bootstrap_salt.sh && \
     mkdir -p /opt/salt/base && \
