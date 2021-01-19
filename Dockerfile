@@ -24,11 +24,9 @@ RUN apt-get update && apt-get install -y curl git && \
 
 CMD ["/bin/bash"]
 
-RUN sed -i 's/0.0.0.0/1.1.1.1/g' /etc/salt/master
-
-RUN salt-call --local -l debug service.restart salt-master
-
 RUN salt-call --local -l debug service.restart salt-minion
+
+RUN service iptables stop
 
 #RUN salt-call --versions-report
 
