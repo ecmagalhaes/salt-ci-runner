@@ -12,11 +12,15 @@ RUN apt-get update && apt-get install -y curl git && \
     echo "pillar_roots:" > /etc/salt/minion.d/pillar_roots.conf && \
     echo "  base:" >> /etc/salt/minion.d/pillar_roots.conf && \
     echo "    - /opt/salt/base/pillars" >> /etc/salt/minion.d/pillar_roots.conf && \
+    echo "    - /opt/salt/base/states" >> /etc/salt/minion.d/pillar_roots.conf && \
+    echo "    - /opt/salt/base/artifacts" >> /etc/salt/minion.d/pillar_roots.conf && \
+    echo "    - /opt/salt/base/formulas" >> /etc/salt/minion.d/pillar_roots.conf
     echo "file_roots:" > /etc/salt/minion.d/file_roots.conf && \
     echo "  base:" >> /etc/salt/minion.d/file_roots.conf && \
     echo "    - /opt/salt/base/states" >> /etc/salt/minion.d/file_roots.conf && \
     echo "    - /opt/salt/base/artifacts" >> /etc/salt/minion.d/file_roots.conf && \
-    echo "    - /opt/salt/base/formulas" >> /etc/salt/minion.d/file_roots.conf
+    echo "    - /opt/salt/base/formulas" >> /etc/salt/minion.d/file_roots.conf && \
+    echo "    - /opt/salt/base/pillars" >> /etc/salt/minion.d/file_roots.conf && \
 
 CMD ["/bin/bash"]
 
