@@ -11,15 +11,13 @@ RUN apt-get update && apt-get install -y curl git && \
     echo "    - /opt/salt/base/" >> /etc/salt/minion.d/pillar_roots.conf && \
     echo "    - /opt/salt/base/pillar" >> /etc/salt/minion.d/pillar_roots.conf && \
     echo "    - /opt/salt/base/states" >> /etc/salt/minion.d/pillar_roots.conf && \
-    echo "    - /opt/salt/base/templates" >> /etc/salt/minion.d/pillar_roots.conf && \
-    echo "    - /opt/salt/base/files" >> /etc/salt/minion.d/pillar_roots.conf && \
+    echo "    - /opt/salt/base/stack" >> /etc/salt/minion.d/pillar_roots.conf && \
     echo "file_roots:" > /etc/salt/minion.d/file_roots.conf && \
     echo "  base:" >> /etc/salt/minion.d/file_roots.conf && \
     echo "    - /opt/salt/base/" >> /etc/salt/minion.d/file_roots.conf && \
     echo "    - /opt/salt/base/pillar" >> /etc/salt/minion.d/file_roots.conf && \
     echo "    - /opt/salt/base/states" >> /etc/salt/minion.d/file_roots.conf && \
-    echo "    - /opt/salt/base/templates" >> /etc/salt/minion.d/file_roots.conf && \
-    echo "    - /opt/salt/base/files" >> /etc/salt/minion.d/file_roots.conf
+    echo "    - /opt/salt/base/stack" >> /etc/salt/minion.d/file_roots.conf
 
 CMD ["/bin/bash"]
 
